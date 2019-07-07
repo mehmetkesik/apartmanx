@@ -1,0 +1,51 @@
+
+<div class="row m0" style="margin:5px 50px 5px 50px;">
+	<div class="col-md-2 text-center">
+		<a href="/" title="Anasayfa">
+			<img src="/root/img/apartman128.png" alt="logo" style="width:96px;height:96px;"/>
+		</a>
+	</div>
+	<div class="col-md-6 text-center" style="padding-top:28px;">
+			<h3 style="color:#868e96;">{{.SiteAd}}</h3>
+	</div>
+	<div class="col-md-4 text-center" style="padding:24px 50px 0px 50px;">
+			<a href="/profil" style="text-decoration: none;">
+				<button class="btn btn-light" style="cursor:pointer;margin:0px 5px 0px 5px;">
+						Profil
+				</button>
+			</a>
+			<a href="/iletisim" style="text-decoration: none;">
+				<button class="btn btn-light" style="cursor:pointer;margin:0px 5px 0px 5px;">
+						İletişim
+				</button>
+			</a>
+			<a href="/cikis" style="text-decoration: none;">
+				<button class="btn btn-light" style="cursor:pointer;margin:0px 5px 0px 5px;">
+						Çıkış
+				</button>
+			</a>
+	</div>
+</div>
+<div class="row m0">
+	<div class="col-md-12" style="background-color:rgb(190, 197, 199);padding:10px 0px 0px 30px;">
+		{{ range $index,$menu := .HeaderMenu }}
+		<div class="dropdown yan">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				{{$menu.Ad}}
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				{{range $index,$secenek := $menu.Secenekler}}
+				  <a class="dropdown-item" href="/{{$menu.Link}}/{{$secenek.Link}}">{{$secenek.Ad}}</a>
+				{{end}}
+			</div>
+		</div>
+		{{end}}
+		{{if .SiteEkleDurum}}
+		<a href="/siteler/siteEkle" style="text-decoration: none;">
+			<button class="btn btn-warning" style="cursor:pointer;margin:0px 5px 0px 5px;">
+				Yeni Site Ekle
+			</button>
+        </a>
+		{{end}}
+	</div>
+</div>

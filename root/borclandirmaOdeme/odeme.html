@@ -1,0 +1,606 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <script src="/root/js/apartmanx.js"></script>
+    <script type="text/javascript">
+
+        var ayrintiistekdurum = false;
+        var ayrintitik = false;
+
+        function divclick() {
+            if (!ayrintiistekdurum) {
+                document.getElementById("ayrintikisi").style.display = "none";
+            }
+            if (!ayrintitik) {
+                ayrintiistekdurum = false;
+                document.getElementById("ayrintikisi").style.display = "none";
+            }
+            ayrintitik = false;
+        }
+
+        function ayrintiistek(idistek) {
+            ayrintiistekdurum = !ayrintiistekdurum;
+            ayrintitik = true;
+            ayrintiyaz("kisiid", idistek);
+            document.getElementById(idistek).style.display = "block";
+        }
+
+        function ayrintiyaz(idyaz, idistek) {
+            var ayrintiid = document.getElementById(idyaz).value;
+            var adyaz = document.getElementById("ad" + ayrintiid).innerText;
+            var soyadyaz = document.getElementById("soyad" + ayrintiid).innerText;
+            var telefonyaz = document.getElementById("telefon" + ayrintiid).innerText;
+            var cinsiyetyaz = document.getElementById("cinsiyet" + ayrintiid).innerText;
+            var yasyaz = document.getElementById("yas" + ayrintiid).innerText;
+            var zamanyaz = document.getElementById("zaman" + ayrintiid).innerText;
+            var sonucyaz = adyaz + " " + soyadyaz + " " + telefonyaz + " " + cinsiyetyaz + " " + yasyaz + " " + zamanyaz;
+            document.getElementById(idistek).innerText = sonucyaz;
+        }
+
+        /////////////////////////////////////////////////7
+
+        function odemeyap(odemeid) {
+            var tarih = new Date();
+            var suankitarih = tarih.getFullYear() + "-" + (tarih.getMonth() + 1) + "-" + tarih.getDate();
+            document.getElementById("odemeekran" + odemeid).style.display = "block";
+            document.getElementById("tarih" + odemeid).defaultValue = suankitarih;
+
+            var tablo = document.getElementById("borctablo");
+            document.getElementById("odemeekran" + odemeid).style.width = tablo.offsetWidth + "px";
+            document.getElementById("odemeekran" + odemeid).style.left = "0px";
+        }
+
+        function odemesil(borcidx, odemeidx, odememiktar) {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/post",
+                    data: {
+                        odemesil: "tiktak",
+                        borcid: borcidx,
+                        odemeid: odemeidx
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.sonuc == "olumlu") {
+                            var odemetoplam = parseFloat(document.getElementById("odemetoplam" + borcidx).innerHTML);
+                            odemetoplam -= parseFloat(odememiktar);
+                            document.getElementById("odemetoplam" + borcidx).innerHTML = odemetoplam;
+                            document.getElementById(borcidx + "-" + odemeidx).remove();
+                        } else {
+                            alert("hata");
+                        }
+                    },
+                    error: function (err) {
+                        alert("hata oluştu!");
+                    }
+                });
+            })
+
+        }
+
+        function odemekapat(odemeid) {
+            document.getElementById("odemeekran" + odemeid).style.display = "none";
+        }
+
+        function defaulttarihayarla(tarihid, tarihx) {
+            document.getElementById(tarihid).defaultValue = tarihx;
+        }
+
+        function borcode(borcid) {
+            var borcx = document.getElementById("borc" + borcid);
+            var kisiidx = document.getElementById("kisiid" + borcid);
+            var kisiadx = document.getElementById("kisi" + borcid);
+            var tarihx = document.getElementById("tarih" + borcid);
+            if (borcx.value == "" || kisiidx.value == "" || tarihx.value == "") {
+                alert("Lütfen tüm alanları doldurunuz");
+                return;
+            }
+            var odemetoplam = parseFloat(document.getElementById("odemetoplam" + borcid).innerHTML);
+            var borcmiktar = parseFloat(document.getElementById("borcmiktar" + borcid).innerHTML);
+            if (parseFloat(borcx.value) + odemetoplam > borcmiktar) {
+                alert("Borçtan daha büyük miktar ödenemez");
+                return;
+            }
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/post",
+                    data: {
+                        odemeyap: "tiktak",
+                        borcid: borcid,
+                        kisiid: kisiidx.value,
+                        miktar: borcx.value,
+                        tarih: tarihx.value
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.sonuc == "olumlu") {
+                            odemetoplam += parseFloat(borcx.value);
+                            document.getElementById("odemetoplam" + borcid).innerHTML = odemetoplam;
+                            document.getElementById("odemeler" + borcid).innerHTML += "<a id='" + borcid + "-" + result.id + "' class='dropdown-item'>" +
+                                    "<button class='btn btn-danger' style='margin-right: 10px;cursor:pointer;'" +
+                                    "onclick=\"odemesil('" + borcid + "','" + result.id + "','" + borcx.value + "')\">Sil</button>"
+                                    + kisiadx.value + " | " + borcx.value + " | " + tarihx.value + "</a>";
+                            odemekapat(borcid);
+
+                        } else {
+                            alert("hata");
+                        }
+                    },
+                    error: function (err) {
+                        alert("hata oluştu!");
+                    }
+                });
+            })
+        }
+
+        function borcsil() {
+            var borcid = borcidtut;
+            if (borcid < 1) {
+                alert("borç id hatası oluştu");
+                return;
+            }
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/post",
+                    data: {
+                        borcsil: "tiktak",
+                        id: borcid
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.sonuc == "olumlu") {
+                            odemekapat(borcid);
+                            document.getElementById("tr" + borcid).remove();
+                        } else {
+                            alert("hata");
+                        }
+                    },
+                    error: function (err) {
+                        alert("hata oluştu!");
+                    }
+                });
+            })
+            uyarikapat()
+        }
+
+        var borcidtut = -1;
+
+        function borcuyari(borcid) {
+            borcidtut = borcid;
+            document.getElementById("borcsilmeuyari").style.display = "block";
+            yukseklikayarla();
+        }
+
+        function yukseklikayarla() {
+            var yukseklik = window.innerHeight;
+            var aksiyon = document.getElementById("borcsilmeaksiyon");
+            var divyukseklik = aksiyon.clientHeight;
+            aksiyon.style.marginTop = (yukseklik / 2) - (divyukseklik / 2) + "px";
+        }
+
+        function tumborclar() {
+            window.location = "/borclandirmaOdeme/odeme?borcara=tumborclar";
+            return false;
+        }
+    </script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <a href="{{.Link}}">
+        <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    </a>
+    <hr/>
+    <div class="row m0" style="margin:0px 30px 0px 30px;padding:10px;">
+        <form method="get">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <select class="form-control" name="blok">
+                    {{range $index,$daireblok := .DaireBlok}}
+                        <option value="{{$daireblok}}">{{$daireblok}}</option>
+                    {{end}}
+                    </select>
+                </div>
+                <div class="col-md-1" style="padding-top: 6px;">
+                    /
+                </div>
+                <div class="col-md-3">
+                    <input type="number" name="daireno" class="form-control" required="true" maxlength="10" min="1"
+                           placeholder="Daire No"/>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-dark" type="submit" style="cursor: pointer;">ARA</button>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-dark" style="cursor: pointer;" onclick="return tumborclar()">TÜM BORÇLAR
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr/>
+    <script type="text/javascript">
+        function kontrolet() {
+            var mulksahibi = document.getElementById("kisi").value;
+            if (mulksahibi == "") {
+                alert("Kişi boş olamaz!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <br/>
+{{if .OdemeAra}}
+    <div class="row m0" style="padding: 20px;" onclick="divclick()">
+        <div class="col-md-12 p0">
+            <table class="table table-striped table-bordered" id="borctablo">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Sil</th>
+                    <th scope="col">Blok</th>
+                    <th scope="col">Daire No</th>
+                    <th scope="col">Kime</th>
+                    <th scope="col">Tarih</th>
+                    <th scope="col">Gelir-Gider</th>
+                    <th scope="col">Firma</th>
+                    <th scope="col">Not</th>
+                    <th scope="col">Borç</th>
+                    <th scope="col">Ödeme</th>
+                    <th scope="col">Ödeme Yap</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range $index,$borc := .Borclar}}
+                <tr id="tr{{$borc.Id}}">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled>
+                        {{$index}}
+                        </button>
+                    </th>
+                    <td>
+                        <button class="btn btn-secondary" style="cursor: pointer;" onclick="borcuyari({{$borc.Id}})">
+                            Sil
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{$borc.Blok}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{$borc.Daireno}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{if eq $borc.Kime "1"}}
+                            OTURAN
+                        {{else if eq $borc.Kime "2"}}
+                            MÜLK SAHİBİ
+                        {{else if eq $borc.Kime "3"}}
+                            KİRACI
+                        {{end}}
+                        </button>
+                    </td>
+                    <td>
+                    {{if eq $borc.Zamangrup "1"}}
+                        <input id="tarihx{{$borc.Id}}" type="date" class="form-control" readonly/>
+                        <script type="text/javascript">
+                            defaulttarihayarla('tarihx{{$borc.Id}}',{{$borc.Tarih}});
+                        </script>
+                    {{else if eq $borc.Zamangrup "2"}}
+                        <input id="tarihx{{$borc.Id}}" type="month" class="form-control" readonly/>
+                        <script type="text/javascript">
+                            defaulttarihayarla('tarihx{{$borc.Id}}',{{$borc.Tarih}});
+                        </script>
+                    {{end}}
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{$borc.Gelirgiderad}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{$borc.Firmaad}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled>
+                        {{$borc.Not}}
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary" id="borcmiktar{{$borc.Id}}">
+                        {{$borc.Miktar}}
+                        </button>
+                    </td>
+                    <td>
+                        <div class="dropdown yan">
+                            <button id="odemetoplam{{$borc.Id}}" class="btn btn-secondary dropdown-toggle" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{$borc.OdemeToplam}}
+                            </button>
+                            <div id="odemeler{{$borc.Id}}" class="dropdown-menu dropdown-menu-right"
+                                 aria-labelledby="dropdownMenuButton">
+                            {{range $index,$odemebilgi := $borc.Odemeler}}
+                                <a id="{{$borc.Id}}-{{$odemebilgi.Id}}" class="dropdown-item">
+                                    <button class="btn btn-danger"
+                                            style="margin-right: 10px;cursor:pointer;"
+                                            onclick="odemesil('{{$borc.Id}}','{{$odemebilgi.Id}}','{{$odemebilgi.Miktar}}')">
+                                        Sil
+                                    </button>
+                                {{$odemebilgi.Kisiad}} | {{$odemebilgi.Miktar}} | {{$odemebilgi.Tarih}}
+                                </a>
+                            {{end}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-dark" onclick="odemeyap({{$borc.Id}})" style="cursor: pointer;">
+                            Ödeme Yap
+                        </button>
+                    </td>
+                    <td id="odemeekran{{$borc.Id}}"
+                        style="position: absolute;background-color: white;right:16px;display: none;">
+                        <div class="row m0">
+                            <div class="col-md-3" style="border-right: 1px lightgray solid;">
+                                <div class="form-group row m0">
+                                    <label class="col-md-3 col-form-label">Tarih</label>
+                                    <div class="col-md-9">
+                                        <input id="tarih{{$borc.Id}}" type="date" class="form-control"
+                                               required="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="border-right: 1px lightgray solid;">
+                                <div class="form-group row m0">
+                                    <label class="col-md-2 col-form-label">Kişi</label>
+                                    <div class="col-md-7">
+                                        <input id="kisiid{{$borc.Id}}" style="display: none;"/>
+                                        <button id="ayrintikisi{{$borc.Id}}" class="btn btn-dark"
+                                                style="display: none;position: absolute;top: -40px;z-index: 1;"
+                                                disabled>
+                                            Ayrıntılar
+                                        </button>
+                                        <input id="kisi{{$borc.Id}}" type="text" class="form-control" required="true"
+                                               maxlength="50"
+                                               onclick="ayrintiistek('ayrintikisi')" readonly/>
+                                    </div>
+                                    <div class=" col-md-3">
+                                        <button class="btn btn-light" onclick="return goster({{$borc.Id}})"
+                                                style="cursor: pointer;">Liste
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3" style="border-right: 1px lightgray solid;">
+                                <div class="form-group row m0">
+                                    <label class="col-md-4 col-form-label">Miktar</label>
+                                    <div class="col-md-7">
+                                        <input id="borc{{$borc.Id}}" type="number" step="0.01" class="form-control"
+                                               required="true" maxlength="10" min="1" placeholder="Miktar"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-danger" style="cursor: pointer;"
+                                        onclick="odemekapat({{$borc.Id}})">
+                                    İptal
+                                </button>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-dark" style="cursor: pointer;" onclick="borcode({{$borc.Id}})">
+                                    Öde
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{{end}}
+    <br/>
+{{template "footer.html" .}}
+</div>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- //////////////////////////////////////////// Kişi Listesi ///////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<script type="text/javascript">
+    var aktifekran = 0;
+
+    function kisisec(id, ad, soyad) {
+        if (id == "bos") {
+            document.getElementById("kisi" + aktifekran).value = "";
+            document.getElementById("kisiid" + aktifekran).value = "";
+        } else {
+            document.getElementById("kisi" + aktifekran).value = ad + " " + soyad;
+            document.getElementById("kisiid" + aktifekran).value = id;
+        }
+        document.getElementById("kisilistesi").style.display = "none";
+    }
+
+    var tiktab = false;
+
+    function kisilistesi(durum) {
+        var liste = document.getElementById("kisilistesi");
+        if (durum == 1) {
+            liste.style.display = "block";
+        } else if (durum == 2) {
+            if (!tiktab) {
+                liste.style.display = "none";
+            }
+        }
+        tiktab = false;
+    }
+
+    function tableclick() {
+        tiktab = true;
+    }
+
+    var aktifekran = 0;
+
+    function goster(id) {
+        aktifekran = id;
+        document.getElementById("kisilistesi").style.display = "block";
+        return false;
+    }
+
+    function cik() {
+        aktifekran = 0;
+        document.getElementById("kisilistesi").style.display = "none";
+    }
+</script>
+<div id="kisilistesi" class="container-fluid" onclick="kisilistesi(2)"
+     style="position: fixed;background-color: rgba(50,50,50,0.5);left:0px;top:0px;width: 100%;height: 100%;display: none;">
+    <div class="row m0" style="height:100%;overflow: auto;">
+        <div class="col-md-12">
+            <button class="btn btn-dark" style="cursor:pointer;margin-top: 10px;" onclick="cik()">X</button>
+            <br/><br/>
+            <table id="listetablo" onclick="tableclick()" class="table table-striped table-bordered"
+                   style="background-color: white;">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ad</th>
+                    <th scope="col">Soyad</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col">Cinsiyet</th>
+                    <th scope="col">Yaş</th>
+                    <th scope="col">Zaman</th>
+                    <th scope="col">Kaydet</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled></button>
+                    </th>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-dark"
+                                onclick="kisisec('bos','','')"
+                                style="cursor:pointer;">
+                            Seç
+                        </button>
+                    </td>
+                </tr>
+                {{range $index,$kisi := .KisilerBilgi}}
+                <tr id="{{$kisi.Id}}">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled>{{$index}}</button>
+                    </th>
+                    <td>
+                        <button id="ad{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Ad}}</button>
+                    </td>
+                    <td>
+                        <button id="soyad{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Soyad}}</button>
+                    </td>
+                    <td>
+                        <button id="telefon{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Telefon}}</button>
+                    </td>
+                    <td>
+                        <button id="cinsiyet{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Cinsiyet}}</button>
+                    </td>
+                    <td>
+                        <button id="yas{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Yas}}</button>
+                    </td>
+                    <td>
+                        <button id="zaman{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Zaman}}</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-dark"
+                                onclick="kisisec('{{$kisi.Id}}','{{$kisi.Ad}}','{{$kisi.Soyad}}')"
+                                style="cursor:pointer;">
+                            Seç
+                        </button>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div><!-- kişi listesi son -->
+
+<!-- borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı -->
+<!-- borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı -->
+<!-- borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı - borç silme uyarı -->
+<script type="text/javascript">
+    var uyaricoltik = false;
+    function borcsilmekapat() {
+        if(!uyaricoltik){
+            document.getElementById("borcsilmeuyari").style.display = "none";
+        }
+        uyaricoltik = false;
+    }
+    function uyaricol() {
+        uyaricoltik = true;
+    }
+
+    function uyarikapat() {
+        document.getElementById("borcsilmeuyari").style.display = "none";
+    }
+</script>
+<div id="borcsilmeuyari" class="container-fluid" onclick="borcsilmekapat()"
+     style="position: fixed;background-color: rgba(0,0,0,0.5);left:0px;top:0px;width: 100%;height: 100%;display: none;">
+    <div class="row m0">
+        <div class="col-md-4">
+        </div>
+        <div id="borcsilmeaksiyon" class="col-md-4 text-center" onclick="uyaricol()"
+             style="background-color: #f7f7f9;border-radius: 10px;padding: 10px;border: 1px lightgray solid;
+             box-shadow: 6px 6px 10px 0 rgba(255, 255, 255, 0.2);">
+            <p class="lead">Borcu silerseniz bu borca ait tüm bilgiler ve ödemeler kalıcı olarak silinir ve tekrar ulaşılamaz !</p>
+            <br/>
+            <p class="lead">Silmek istediğinizden emin misiniz ?</p>
+            <br/>
+            <button class="btn btn-dark" style="cursor: pointer;margin:0px 10px 0px 10px;" onclick="uyarikapat()">VAZGEÇ</button>
+            <button class="btn btn-dark" style="cursor: pointer;margin:0px 10px 0px 10px;" onclick="borcsil()">SİL
+            </button>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div><!-- borc silme uyarı son -->
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - Profil</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <form action="" method="post" style="padding:10px 40px 10px 40px;border:1px #a5abb1 solid;margin:0 auto;">
+        <a href="/profil" style="text-decoration: none;">
+            <h5 style="display: inline-block;color:#539396;">Profil Ekranı</h5>
+        </a>
+        {{if .ProfilKayitDurum}}
+            <span class="text-success" style="margin-left: 50px;font-size: 16px;"> Profil Başarıyla Kaydedildi</span>
+        {{end}}
+        <hr/>
+        <div class="row m0">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Ad</label>
+                    <div class="col-md-7">
+                        <input type="text" name="ad" value="{{.Kisi.Ad}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Soyad</label>
+                    <div class="col-md-7">
+                        <input type="text" name="soyad" value="{{.Kisi.Soyad}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Şifre</label>
+                    <div class="col-md-7">
+                        <input type="text" name="sifre" value="{{.Kisi.Sifre}}" class="form-control" maxlength="50" required="true"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Mail</label>
+                    <div class="col-md-7">
+                        <input type="email" name="mail" value="{{.Kisi.Mail}}" class="form-control" maxlength="20">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Telefon</label>
+                    <div class="col-md-7">
+                        <input type="number" name="telefon" value="{{.Kisi.Telefon}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Yaş</label>
+                    <div class="col-md-7">
+                        <input type="number" name="yas" value="{{.Kisi.Yas}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Cinsiyet</label>
+                    <div class="col-md-7">
+                        <select class="form-control" name="cinsiyet">
+                            {{if eq .Kisi.Cinsiyet "ERKEK"}}
+                                <option value=""></option>
+                                <option value="ERKEK" selected>Erkek</option>
+                                <option value="KIZ">Kız</option>
+                            {{else if eq .Kisi.Cinsiyet "KIZ"}}
+                                <option value=""></option>
+                                <option value="ERKEK">Erkek</option>
+                                <option value="KIZ" selected>Kız</option>
+                            {{else}}
+                                <option value="" selected></option>
+                                <option value="ERKEK">Erkek</option>
+                                <option value="KIZ">Kız</option>
+                            {{end}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Adres</label>
+                    <div class="col-md-7">
+                        <textarea name="adres" value="{{.Kisi.Adres}}" class="form-control" maxlength="150"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row m0">
+            <button type="submit" name="profilkaydet" value="tiktak" class="btn btn-dark" style="cursor:pointer;">Kaydet
+            </button>
+        </div>
+    </form>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

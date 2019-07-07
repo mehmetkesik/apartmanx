@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apartman X - Rapor</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function pdfaktarayar() {
+            document.getElementById("raporlink").value = window.location.toString();
+            document.getElementById("raporbaslik").value = document.getElementById("raporbaslikarea").value;
+            document.getElementById("rapornot").value = document.getElementById("rapornotarea").value;
+            return true;
+        }
+    </script>
+</head>
+<body>
+{{if .AramaDurum}}
+<br/>
+<div class="row m0" style="max-width: 900px;margin: 0 auto;">
+    <div class="col-12">
+    {{if .Saf}}
+    {{if ne .RaporBaslik ""}}
+        <textarea id="raporbaslikarea" class="form-control"
+                  style="width:100%;border: none;resize:none;font-weight: bold;color:black"
+                  rows="{{.RaporBaslikSatir}}">
+        </textarea>
+        <script type="text/javascript">
+            document.getElementById("raporbaslikarea").value = "{{.RaporBaslik}}";
+        </script>
+    {{end}}
+    {{else}}
+        <textarea id="raporbaslikarea" class="form-control"
+                  style="width:100%;border: none;font-weight: bold;color: black;" rows="4">
+        </textarea>
+        <script type="text/javascript">
+            document.getElementById("raporbaslikarea").value = "";
+        </script>
+    {{end}}
+    </div>
+</div>
+{{if .LinkVeri.KisiDagit}}
+<div class="row m0">
+    <div class="col-md-12">
+        <br/>
+        <table class="table table-sm" style="max-width: 900px;margin: 0 auto;">
+            <thead>
+            <tr>
+                <th style="border: none;">
+                    <p style="font-size: 20px;">Borç Bilgisi</p>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col">Blok</th>
+                <th scope="col">Daire No</th>
+                <th scope="col">Sorumlu</th>
+                <th scope="col">Gün</th>
+                <th scope="col">Tarih</th>
+                <th scope="col">Gelir-Gider</th>
+                <th scope="col">Firma</th>
+                <th scope="col">Borç</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$borc := .Rapor.Borclandirma}}
+            <tr>
+                <td>
+                {{$borc.Borc.Blok}}
+                </td>
+                <td>
+                {{$borc.Borc.Daireno}}
+                </td>
+                <td>
+                {{$borc.Kisi.Ad}} {{$borc.Kisi.Soyad}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "2"}}
+                    {{$borc.BorcGun}}
+                {{end}}
+                </td>
+                <td>
+                {{$borc.Borc.Tarih}}
+                </td>
+                <td>
+                {{$borc.Borc.Gelirgiderad}}
+                </td>
+                <td>
+                {{$borc.Borc.Firmaad}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "1"}}
+                {{$borc.Borc.Miktar}}
+            {{else if eq $borc.Borc.Zamangrup "2"}}
+                {{$borc.BorcPayi}}
+            {{end}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row m0">
+    <div class="col-md-12">
+        <br/>
+        <table class="table table-sm" style="max-width: 900px;margin: 0 auto;">
+            <thead>
+            <tr>
+                <th style="border: none;">
+                    <p style="font-size: 20px;">Ödeme Bilgisi</p>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col">Ödeyen Ad</th>
+                <th scope="col">Miktar</th>
+                <th scope="col">Tarih</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$odeme := .Rapor.Odeme}}
+            <tr>
+                <td>
+                {{$odeme.Kisiad}}
+                </td>
+                <td>
+                {{$odeme.Miktar}}
+                </td>
+                <td>
+                {{$odeme.Tarih}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi --->
+<!-- Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi - Rapor Kişi --->
+{{else}}
+<!-- Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire --->
+<!-- Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire - Rapor Daire --->
+<div class="row m0">
+    <div class="col-md-12">
+        <br/>
+        <table class="table table-sm" style="max-width: 900px;margin: 0 auto;">
+            <thead>
+            <tr>
+                <th style="border: none;">
+                    <p style="font-size: 20px;">Borç Bilgisi</p>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col">Blok</th>
+                <th scope="col">Daire No</th>
+                <th scope="col">Kime</th>
+                <th scope="col">Tarih</th>
+                <th scope="col">Gelir-Gider</th>
+                <th scope="col">Firma</th>
+                <th scope="col">Borç</th>
+                <th scope="col">Ödeme</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$borc := .Rapor.Borclandirma}}
+            <tr>
+                <td>
+                {{$borc.Borc.Blok}}
+                </td>
+                <td>
+                {{$borc.Borc.Daireno}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Kime "1"}}
+                    OTURAN
+                {{else if eq $borc.Borc.Kime "2"}}
+                    MÜLK SAHİBİ
+                {{else if eq $borc.Borc.Kime "3"}}
+                    KİRACI
+                {{end}}
+                </td>
+                <td>
+                {{$borc.Borc.Tarih}}
+                </td>
+                <td>
+                {{$borc.Borc.Gelirgiderad}}
+                </td>
+                <td>
+                {{$borc.Borc.Firmaad}}
+                </td>
+                <td>
+                {{$borc.Borc.Miktar}}
+                </td>
+                <td>
+                {{$borc.Borc.OdemeToplam}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row m0">
+    <div class="col-md-12">
+        <br/>
+        <table class="table table-sm" style="max-width: 900px;margin: 0 auto;">
+            <thead>
+            <tr>
+                <th style="border: none;">
+                    <p style="font-size: 20px;">Ödeme Bilgisi</p>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col">Ödeyen Ad</th>
+                <th scope="col">Miktar</th>
+                <th scope="col">Tarih</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$odeme := .Rapor.Odeme}}
+            <tr>
+                <td>
+                {{$odeme.Kisiad}}
+                </td>
+                <td>
+                {{$odeme.Miktar}}
+                </td>
+                <td>
+                {{$odeme.Tarih}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}
+<br/>
+<div class="row m0"
+     style="max-width: 900px;margin:0 auto;border-top: 1px lightgray solid;padding: 20px;margin-top: 40px;">
+    <div class="col-6 p0" style="float: left;">
+    {{if .Saf}}
+    {{if ne .RaporNot ""}}
+        <textarea id="rapornotarea" class="form-control"
+                  style="width:100%;border: none;resize: none;"
+                  rows="{{.RaporNotSatir}}">
+        </textarea>
+        <script type="text/javascript">
+            document.getElementById("rapornotarea").value = "{{.RaporNot}}";
+        </script>
+    {{end}}
+    {{else}}
+        <textarea id="rapornotarea" class="form-control"
+                  style="width:100%;border: none;" rows="4">
+        </textarea>
+        <script type="text/javascript">
+            document.getElementById("rapornotarea").value = "";
+        </script>
+    {{end}}
+    </div>
+    <div class="col-6 text-right" style="float: right;">
+        <p class="text-dark" >Toplam Borç: {{.Rapor.BorcToplam}}</p>
+        <p class="text-dark">Toplam Ödeme: {{.Rapor.OdemeToplam}}</p>
+        <p class="text-dark">Kalan Borç: {{.Rapor.KalanBorc}}</p>
+    </div>
+</div>
+{{if eq .Saf false}}
+<form action="" method="post" onsubmit="pdfaktarayar()">
+    <div class="row m0">
+        <div class="col-md-12 text-center">
+            <textarea id="raporlink" type="text" name="raporlink" style="display: none;"></textarea>
+            <textarea id="raporbaslik" type="text" name="raporbaslik" style="display: none;"></textarea>
+            <textarea id="rapornot" type="text" name="rapornot" style="display: none;"></textarea>
+            <button id="pdfaktar" class="btn btn-info" style="cursor: pointer;margin-right: 10px;" type="submit"
+                    name="pdfaktar" value="tiktak">
+                PDF Olarak Dışa Aktar
+            </button>
+        </div>
+    </div>
+</form>
+<br/>
+<br/>
+{{end}}
+{{end}}
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - Site Ekle</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .dosyasec {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <form action="" method="post" enctype="multipart/form-data"
+          style="padding:10px 40px 10px 40px;border:1px #a5abb1 solid;margin:0 auto;">
+        <h5>Site Ekleme Ekranı</h5>
+        <hr/>
+        <div class="row m0">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Site Adı</label>
+                    <div class="col-md-7">
+                        <textarea type="text" name="sitead" class="form-control" maxlength="100"
+                                  required="true"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Yönetici Adı</label>
+                    <div class="col-md-7">
+                        <input type="text" name="yoneticiad" class="form-control"
+                               value="{{.YoneticiAd}}" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Fotoğraf</label>
+                    <div class="col-md-7">
+                        <input type="file" name="foto" id="dosya" class="form-control dosyasec" accept="image/x-png,image/gif,image/jpeg"/>
+                        <label for="dosya" id="dosyabtn" class="btn btn-info" style="cursor: pointer;">Dosya Seç</label>
+                        <label class="btn btn-sm btn-danger" style="cursor:pointer;" onclick="dosyatemizle()">X</label>
+                        <script type="text/javascript">
+                            var input = document.querySelector('#dosya');
+                            input.addEventListener("change", guncelleme);
+
+                            function guncelleme() {
+                                document.getElementById("dosyabtn").innerHTML = input.files[0].name;
+                            }
+
+                            function dosyatemizle() {
+                                document.getElementById("dosya").value = "";
+                                document.getElementById("dosyabtn").innerHTML = "Dosya Seç";
+                            }
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Hakkında</label>
+                    <div class="col-md-7">
+                        <textarea name="hakkinda" class="form-control" maxlength="150"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Telefonu</label>
+                    <div class="col-md-7">
+                        <input type="number" name="telefon" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Cep Telefonu</label>
+                    <div class="col-md-7">
+                        <input type="number" name="ceptelefon" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Adres</label>
+                    <div class="col-md-7">
+                        <textarea name="adres" class="form-control" maxlength="150"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Vergi Dairesi</label>
+                    <div class="col-md-7">
+                        <input type="text" name="vergidaire" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Vergi No</label>
+                    <div class="col-md-7">
+                        <input type="text" name="vergino" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row m0">
+            <button type="submit" name="siteekle" value="tiktak" class="btn btn-dark" style="cursor:pointer;">Ekle
+            </button>
+        </div>
+    </form>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

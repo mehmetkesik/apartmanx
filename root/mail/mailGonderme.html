@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function kisisectik() {
+            var tk = document.getElementById("tumkisiler");
+            var gidecekmail = document.getElementById("gidecekmail");
+            if (tk.checked) {
+                gidecekmail.value = "mail@mail.com";
+                gidecekmail.style.display = "none";
+            } else {
+                gidecekmail.value = "";
+                gidecekmail.style.display = "inline-block";
+            }
+        }
+    </script>
+    <style type="text/css">
+        .dosyasec {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <a href="{{.Link}}">
+        <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    </a>
+    <hr/>
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="row m0">
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4 text-center" style="padding-top: 30px;">
+                        <input type="text" name="mailadres" class="form-control"
+                               style="display: inline-block;max-width: 200px;margin-bottom: 20px;"
+                               placeholder="E-Mail Adresiniz" required="true" maxlength="50"/>
+                        <span>@gmail.com</span>
+                        <input type="text" name="sifre" class="form-control"
+                               style="display: inline-block;max-width: 200px;"
+                               placeholder="Şifreniz" required="true" maxlength="50"/>
+                        <span style="visibility: hidden;">@gmail.com</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="mailbaslik" placeholder="Başlık"/><br/>
+                        <textarea id="mailtext" name="mailtext" class="form-control" rows="5" placeholder="E-Mail"
+                                  maxlength="500"
+                                  required="true">
+                        </textarea>
+                        <script type="text/javascript">
+                            document.getElementById("mailtext").value = "";
+                        </script>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="tumkisiler" value="xxx"
+                                   id="tumkisiler"
+                                   onclick="kisisectik()">
+                            Tüm Dairelere Gönder
+                        </div>
+                        <br/>
+                        <input type="mail" id="gidecekmail" name="gidecekmail" class="form-control"
+                               style="display: inline-block;max-width: 300px;"
+                               placeholder="Gönderilecek E-Mail" required="true"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="file" name="dosya" id="dosya" class="form-control dosyasec"/>
+                        <label for="dosya" id="dosyabtn" class="btn btn-info" style="cursor: pointer;">Dosya Seç</label>
+                        <label class="btn btn-sm btn-danger" style="cursor:pointer;" onclick="dosyatemizle()">X</label>
+                        <button class="btn btn-info" type="submit" name="mailgonder" value="tiktak"
+                                style="cursor:pointer;float: right;">
+                            Gönder
+                        </button>
+                        <script type="text/javascript">
+                            var input = document.querySelector('#dosya');
+                            input.addEventListener("change", guncelleme);
+
+                            function guncelleme() {
+                                document.getElementById("dosyabtn").innerHTML = input.files[0].name;
+                            }
+
+                            function dosyatemizle() {
+                                document.getElementById("dosya").value = "";
+                                document.getElementById("dosyabtn").innerHTML = "Dosya Seç";
+                            }
+
+                        </script>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br/>
+
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

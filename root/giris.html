@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+ 	<head>
+   		<title>Apartman X</title>
+  	 	<meta id="description" name="description" content="Apartman Yönetimi" />
+   		<meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler" />
+   		<meta charset="utf-8"/>
+   		<meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+   		<link rel="shortcut icon" href="/root/foto/ico.ico"/>
+   		<link rel="stylesheet" href="/root/css/bootstrap.css"/>
+		<link rel="stylesheet" href="/root/css/style.css"/>
+		<script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+		<script src="/root/js/popper.min.js"></script>
+		<script src="/root/js/bootstrap.min.js"></script>
+ 	</head>
+ 	<body>
+  		<div class="container-fluid p0">
+			<br/>
+			<div class="row m0">
+				<form action="" method="post" style="margin:0px 30px 0px 30px;padding:10px;border:1px #a5abb1 solid;margin:0 auto;">
+                    <div class="row m0">
+                        <div class="col-md-12">
+                            <h5>Apartman X</h5>
+                            <hr/>
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label">Şifre</label>
+                                <div class="col-md-7">
+                                    <input type="text" name="sifre" class="form-control" maxlength="50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row m0">
+                        <button type="submit" name="giris" value="tiktak" class="btn btn-dark" style="cursor:pointer;">Giriş</button>
+                    </div>
+                </form>
+			</div>
+			<br/>
+			{{template "footer.html" .}}
+		</div>
+ 	</body>
+</html>

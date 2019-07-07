@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+ 	<head>
+   		<title>Apartman X</title>
+  	 	<meta id="description" name="description" content="Apartman Yönetimi" />
+   		<meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler" />
+   		<meta charset="utf-8"/>
+   		<meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+   		<link rel="shortcut icon" href="/root/img/icon.ico"/>
+   		<link rel="stylesheet" href="/root/css/bootstrap.css"/>
+		<link rel="stylesheet" href="/root/css/style.css"/>
+		<script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+		<script src="/root/js/popper.min.js"></script>
+		<script src="/root/js/bootstrap.min.js"></script>
+ 	</head>
+ 	<body>
+  		<div class="container-fluid p0">
+			{{template "header.html" .}}
+			<br/>
+			<div class="row m0">
+				<div class="col-md-12">
+					{{$aktif := .AktifSite}}
+					{{range $index,$site := .Siteler}}
+						{{if eq $site.Id $aktif}}
+                            <div class="card" style="width: 20rem;display:inline-block;vertical-align:top;border:2px #868e96 solid;margin-bottom: 10px;">
+                                <figure class="figure">
+                                    <img src="/root/img/{{if eq $site.Foto ""}}0.svg{{else}}{{$site.Foto}}{{end}}" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+								</figure>
+                                <div class="card-body">
+                                    <h4 class="card-title">{{$site.Sitead}}</h4>
+                                    <p class="card-text">{{$site.Hakkinda}}</p>
+                                    <a href="/siteler/siteDuzenle" name="duzenle" value="{{$site.Id}}" class="btn btn-success">DÜZENLE</a>
+                                </div>
+                            </div>
+                        {{else}}
+                            <div class="card" style="width: 20rem;display:inline-block;vertical-align:top;margin-bottom: 10px;">
+                                <figure class="figure">
+                                    <img src="/root/img/{{if eq $site.Foto ""}}0.svg{{else}}{{$site.Foto}}{{end}}" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+								</figure>
+                                <div class="card-body">
+									<form action="" method="post">
+                                        <h4 class="card-title">{{$site.Sitead}}</h4>
+                                        <p class="card-text">{{$site.Hakkinda}}</p>
+                                        <button type="submit" name="sitesec" value="{{$site.Id}}"  class="btn btn-primary" style="cursor: pointer;">
+											SEÇ
+										</button>
+									</form>
+                                </div>
+                            </div>
+						{{end}}
+					{{end}}
+				</div>
+			</div>
+			<br/>
+				<!--- <img class="card-img-top" src="">
+
+                                <figure class="figure">
+                                    <img src="/root/img/" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                                    <figcaption class="figure-caption">A caption for the above image.</figcaption>
+                                </figure>-->
+			{{template "footer.html" .}}
+		</div>
+ 	</body>
+</html>

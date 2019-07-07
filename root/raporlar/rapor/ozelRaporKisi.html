@@ -1,0 +1,98 @@
+<div class="row m0">
+    <div class="col-md-7">
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Blok</th>
+                <th scope="col">Daire No</th>
+                <th scope="col">Sorumlu</th>
+                <th scope="col">Gün</th>
+                <th scope="col">Tarih</th>
+                <th scope="col">Gelir-Gider</th>
+                <th scope="col">Firma</th>
+                <th scope="col">Borç</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$borc := .Rapor.Borclandirma}}
+            <tr>
+                <th scope="row">
+                {{$index}}
+                </th>
+                <td>
+                {{$borc.Borc.Blok}}
+                </td>
+                <td>
+                {{$borc.Borc.Daireno}}
+                </td>
+                <td>
+                {{$borc.Kisi.Ad}} {{$borc.Kisi.Soyad}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "2"}}
+                    {{$borc.BorcGun}}
+                {{end}}
+                </td>
+                <td>
+                {{$borc.Borc.Tarih}}
+                </td>
+                <td>
+                {{$borc.Borc.Gelirgiderad}}
+                </td>
+                <td>
+                {{$borc.Borc.Firmaad}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "1"}}
+                {{$borc.Borc.Miktar}}
+            {{else if eq $borc.Borc.Zamangrup "2"}}
+                {{$borc.BorcPayi}}
+            {{end}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-5">
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ödeyen Ad</th>
+                <th scope="col">Miktar</th>
+                <th scope="col">Tarih</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index,$odeme := .Rapor.Odeme}}
+            <tr>
+                <th scope="row">
+                {{$index}}
+                </th>
+                <td>
+                {{$odeme.Kisiad}}
+                </td>
+                <td>
+                {{$odeme.Miktar}}
+                </td>
+                <td>
+                {{$odeme.Tarih}}
+                </td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+<div class="row m0">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 text-right">
+        <p class="text-muted">Toplam Borç: {{.Rapor.BorcToplam}}</p>
+        <p class="text-muted">Toplam Ödeme: {{.Rapor.OdemeToplam}}</p>
+        <p class="text-muted">Kalan Borç: {{.Rapor.KalanBorc}}</p>
+    </div>
+    <div class="col-md-1"></div>
+</div>

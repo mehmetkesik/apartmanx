@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - Site Düzenle</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function sitesiluyari() {
+            document.getElementById("sitesilmeuyari").style.display = "block";
+            yukseklikayarla();
+            return false;
+        }
+
+        function yukseklikayarla() {
+            var yukseklik = window.innerHeight;
+            var aksiyon = document.getElementById("sitesilmeaksiyon");
+            var divyukseklik = aksiyon.clientHeight;
+            aksiyon.style.marginTop = (yukseklik / 2) - (divyukseklik / 2) + "px";
+        }
+    </script>
+    <style type="text/css">
+        .dosyasec {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <form action="" method="post" enctype="multipart/form-data"
+          style="padding:10px 40px 10px 40px;border:1px #a5abb1 solid;margin:0 auto;">
+        <h5>Site Düzenleme Ekranı</h5>
+        <hr/>
+        <div class="row m0">
+            <div class="col-md-4">
+                <div class="form-group row" style="display: none;">
+                    <label class="col-md-5 col-form-label">Site Foto</label>
+                    <div class="col-md-7">
+                        <textarea type="text" name="sitefoto" class="form-control" maxlength="100">{{.AktifSiteBilgi.Foto}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Site Adı</label>
+                    <div class="col-md-7">
+                        <textarea type="text" name="sitead" class="form-control" maxlength="100"
+                                  required="true">{{.AktifSiteBilgi.Sitead}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Yönetici Adı</label>
+                    <div class="col-md-7">
+                        <input type="text" name="yoneticiad" value="{{.AktifSiteBilgi.Yoneticiad}}" class="form-control"
+                               value="" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Fotoğraf</label>
+                    <div class="col-md-7">
+                        <input type="file" name="foto" id="dosya" class="form-control dosyasec" accept="image/x-png,image/gif,image/jpeg"/>
+                        <label for="dosya" id="dosyabtn" class="btn btn-info" style="cursor: pointer;">Dosya Seç</label>
+                        <label class="btn btn-sm btn-danger" style="cursor:pointer;" onclick="dosyatemizle()">X</label>
+                        <script type="text/javascript">
+                            var input = document.querySelector('#dosya');
+                            input.addEventListener("change", guncelleme);
+
+                            function guncelleme() {
+                                document.getElementById("dosyabtn").innerHTML = input.files[0].name;
+                            }
+
+                            function dosyatemizle() {
+                                document.getElementById("dosya").value = "";
+                                document.getElementById("dosyabtn").innerHTML = "Dosya Seç";
+                            }
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Hakkında</label>
+                    <div class="col-md-7">
+                        <textarea name="hakkinda" class="form-control" maxlength="150">{{.AktifSiteBilgi.Hakkinda}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Telefonu</label>
+                    <div class="col-md-7">
+                        <input type="number" name="telefon" value="{{.AktifSiteBilgi.Telefon}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Cep Telefonu</label>
+                    <div class="col-md-7">
+                        <input type="number" name="ceptelefon" value="{{.AktifSiteBilgi.Ceptelefon}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Adres</label>
+                    <div class="col-md-7">
+                        <textarea name="adres" class="form-control" maxlength="150">{{.AktifSiteBilgi.Adres}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Vergi Dairesi</label>
+                    <div class="col-md-7">
+                        <input type="text" name="vergidaire" value="{{.AktifSiteBilgi.Vergidaire}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Vergi No</label>
+                    <div class="col-md-7">
+                        <input type="text" name="vergino" value="{{.AktifSiteBilgi.Vergino}}" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row m0">
+            <button type="submit" name="siteduzenle" value="tiktak" class="btn btn-dark" style="cursor:pointer;margin-right: 10px;">Kaydet
+            </button>
+            <button class="btn btn-danger" style="cursor:pointer;margin-right: 10px;" {{if lt .SiteSayi 2}}disabled{{end}}
+            onclick="return sitesiluyari()">
+                Sil
+            </button>
+            <!-- site silme uyarı - site silme uyarı - site silme uyarı - site silme uyarı - site silme uyarı - site silme uyarı -->
+            <script type="text/javascript">
+                var uyaricoltik = false;
+                function sitesilmekapat() {
+                    if(!uyaricoltik){
+                        document.getElementById("sitesilmeuyari").style.display = "none";
+                    }
+                    uyaricoltik = false;
+                }
+                function uyaricol() {
+                    uyaricoltik = true;
+                }
+
+                function uyarikapat() {
+                    document.getElementById("sitesilmeuyari").style.display = "none";
+                    return false;
+                }
+            </script>
+            <div id="sitesilmeuyari" class="container-fluid" onclick="sitesilmekapat()"
+                 style="position: fixed;background-color: rgba(0,0,0,0.5);left:0px;top:0px;width: 100%;height: 100%;display: none;">
+                <div class="row m0">
+                    <div class="col-md-4">
+                    </div>
+                    <div id="sitesilmeaksiyon" class="col-md-4 text-center" onclick="uyaricol()"
+                         style="background-color: #f7f7f9;border-radius: 10px;padding: 10px;border: 1px lightgray solid;
+             box-shadow: 6px 6px 10px 0 rgba(255, 255, 255, 0.2);">
+                        <p class="lead">Siteyi silerseniz bu siteyle alakalı tüm veriler kalıcı olarak silinir ve tekrar ulaşılamaz !</p>
+                        <br/>
+                        <p class="lead">Silmek istediğinizden emin misiniz ?</p>
+                        <br/>
+                        <button class="btn btn-dark" style="cursor: pointer;margin:0px 10px 0px 10px;" onclick="return uyarikapat()">VAZGEÇ</button>
+                        <button type="submit" name="sitesil" value="tiktak" class="btn btn-dark"
+                                style="cursor: pointer;margin:0px 10px 0px 10px;">
+                            SİL
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            </div><!-- site silme uyarı son -->
+        </div>
+    </form>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

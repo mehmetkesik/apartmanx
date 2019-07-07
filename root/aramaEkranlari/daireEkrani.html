@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/foto/ico.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    <hr/>
+    <div class="row m0" style="margin:0px 30px 0px 30px;padding:10px;">
+        <form method="get">
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <input type="text" name="blok" class="form-control" required="true" maxlength="10"
+                           placeholder="Blok" value="A"/>
+                </div>
+                <div class="col-md-1" style="padding-top: 6px;">
+                    /
+                </div>
+                <div class="col-md-3">
+                    <input type="number" name="daireno" class="form-control" required="true" maxlength="10"
+                           placeholder="Daire No"/>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-dark">ARA</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form action="" method="post" style="margin:0px 30px 0px 30px;padding:10px;border:1px #a5abb1 solid;">
+        <div class="row m0">
+            <div class="col-md-4">
+                <h5>Genel Bilgiler</h5>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Blok/Daire No</label>
+                    <div class="col-md-3">
+                        <input name="blok" type="text" class="form-control" required="true" maxlength="10" value="A"/>
+                    </div>
+                    <div class="col-md-1 text-center" style="margin-top:4px;">/</div>
+                    <div class="col-md-3">
+                        <input name="daireno" type="number" class="form-control" required="true" maxlength="10">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Mülk Sahibi</label>
+                    <div class="col-md-7">
+                        <input type="text" name="mulksahibi" class="form-control" required="true" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Kiracı</label>
+                    <div class="col-md-7">
+                        <input type="text" name="kiraci" class="form-control" required="true" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Oturan</label>
+                    <div class="col-md-7">
+                        <select class="form-control">
+                            <option name="oturan">EV SAHİBİ</option>
+                            <option name="oturan">KİRACI</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Tipi</label>
+                    <div class="col-md-7">
+                        <select class="form-control">
+                            <option name="tipi">KONUT</option>
+                            <option name="tipi">İŞ YERİ</option>
+                            <option name="tipi">DEPO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-5 col-form-label">Mail Adresi</label>
+                    <div class="col-md-7">
+                        <input type="text" name="mail" class="form-control" maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div id="bilgikasa" class="col-md-8">
+                <h5>Diğer Bilgiler</h5>
+                <script type="text/javascript">
+                    var sayi = 1;
+
+                    function bilgiekle() {
+                        var deger = document.getElementById("bilgiad").value;
+                        if (deger == "") {
+                            return false;
+                        }
+                        document.getElementById("bilgikasa").innerHTML += `
+									<div class="form-group row">
+										<label class="col-md-5 col-form-label">` + deger + `</label>
+										<div class="col-md-7">
+											<input type="text" name="ekstra` + sayi + `:` + deger + `" class="form-control"  maxlength="50">
+										</div>
+									</div>
+								`
+                        return false;
+                    }
+                </script>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Bilgi Ekle</label>
+                    <div class="col-md-8">
+                        <input id="bilgiad" class="form-control" placeholder="Ad" maxlength="20"/>
+                    </div>
+                    <div class="col-md-2">
+                        <button onclick="return bilgiekle();" class="btn btn-dark">Ekle</button>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        </div>
+        <hr/>
+        <div class="row m0">
+            <button type="submit" name="dairekayit" value="tiktak" class="btn btn-dark" style="cursor: pointer;">
+                Kaydet
+            </button>
+        </div>
+    </form>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

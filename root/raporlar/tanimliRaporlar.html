@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+    <script src="/root/js/apartmanx.js"></script>
+    <script type="text/javascript">
+        function sablonusil(idx) {
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/post",
+                    data: {
+                        sablonsil: "tiktak",
+                        id: idx
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        window.location = "{{.Link}}";
+                    },
+                    error: function (err) {
+                        alert("hata oluştu!");
+                    }
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <a href="{{.Link}}">
+        <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    </a>
+    <hr/>
+    <div class="row m0">
+        <div class="col-md-2">
+            <div class="list-group">
+            {{$sorguid := .SorguId}}
+            {{range $index,$rapor := .TanimliRaporlar}}
+                <a href="{{$rapor.Link}}&x={{$rapor.Id}}"
+                   class="list-group-item list-group-item-action {{if eq $rapor.Id $sorguid}}active{{end}}">
+                {{$rapor.Ad}}
+                </a>
+            {{end}}
+            </div>
+        </div>
+        <div class="col-md-10">
+        {{if .AramaDurum}}
+            <div class="row m0">
+                <div class="col-md-6">
+                    <button class="btn btn-info" style="cursor: pointer;" onclick="raporal()">
+                        Rapor Al
+                    </button>
+                </div>
+                <div class="col-md-6 text-right">
+                    <button class="btn btn-danger" style="cursor: pointer;" onclick="sablonusil({{$sorguid}})">
+                        Şablonu Sil
+                    </button>
+                </div>
+            </div>
+            <br/>
+        {{if .LinkVeri.KisiDagit}}
+                {{template "ozelRaporKisi.html" .}}
+            {{else}}
+                {{template "ozelRaporDaire.html" .}}
+            {{end}}
+        {{end}}
+        </div>
+    </div>
+    <br/>
+{{template "footer.html" .}}
+</div>
+
+<!-- kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi -->
+<!-- kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi -->
+<!-- kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi - kişi listesi -->
+<script type="text/javascript">
+    var aktifekran = 0;
+
+    function kisisec(id, ad, soyad) {
+        if (id == "bos") {
+            document.getElementById("kisi" + aktifekran).value = "";
+            document.getElementById("kisiid" + aktifekran).value = "";
+        } else {
+            document.getElementById("kisi" + aktifekran).value = ad + " " + soyad;
+            document.getElementById("kisiid" + aktifekran).value = id;
+        }
+        document.getElementById("kisilistesi").style.display = "none";
+    }
+
+    var tiktab = false;
+
+    function kisilistesi(durum) {
+        var liste = document.getElementById("kisilistesi");
+        if (durum == 1) {
+            liste.style.display = "block";
+        } else if (durum == 2) {
+            if (!tiktab) {
+                liste.style.display = "none";
+            }
+        }
+        tiktab = false;
+    }
+
+    function tableclick() {
+        tiktab = true;
+    }
+
+    var aktifekran = 0;
+
+    function goster(id) {
+        aktifekran = id;
+        document.getElementById("kisilistesi").style.display = "block";
+        return false;
+    }
+
+    function cik() {
+        aktifekran = 0;
+        document.getElementById("kisilistesi").style.display = "none";
+    }
+</script>
+<div id="kisilistesi" class="container-fluid" onclick="kisilistesi(2)"
+     style="position: fixed;background-color: rgba(50,50,50,0.5);left:0px;top:0px;width: 100%;height: 100%;display: none;z-index:10;">
+    <div class="row m0" style="height:100%;overflow: auto;">
+        <div class="col-md-12">
+            <button class="btn btn-dark" style="cursor:pointer;margin-top: 10px;" onclick="cik()">X</button>
+            <br/><br/>
+            <table id="listetablo" onclick="tableclick()" class="table table-striped table-bordered"
+                   style="background-color: white;">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ad</th>
+                    <th scope="col">Soyad</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col">Cinsiyet</th>
+                    <th scope="col">Yaş</th>
+                    <th scope="col">Zaman</th>
+                    <th scope="col">Kaydet</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled></button>
+                    </th>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-light" disabled></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-dark"
+                                onclick="kisisec('bos','','')"
+                                style="cursor:pointer;">
+                            Seç
+                        </button>
+                    </td>
+                </tr>
+                {{range $index,$kisi := .KisilerBilgi}}
+                <tr id="{{$kisi.Id}}">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled>{{$index}}</button>
+                    </th>
+                    <td>
+                        <button id="ad{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Ad}}</button>
+                    </td>
+                    <td>
+                        <button id="soyad{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Soyad}}</button>
+                    </td>
+                    <td>
+                        <button id="telefon{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Telefon}}</button>
+                    </td>
+                    <td>
+                        <button id="cinsiyet{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Cinsiyet}}</button>
+                    </td>
+                    <td>
+                        <button id="yas{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Yas}}</button>
+                    </td>
+                    <td>
+                        <button id="zaman{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Zaman}}</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-dark"
+                                onclick="kisisec('{{$kisi.Id}}','{{$kisi.Ad}}','{{$kisi.Soyad}}')"
+                                style="cursor:pointer;">
+                            Seç
+                        </button>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div><!-- kişi listesi son -->
+</body>
+</html>

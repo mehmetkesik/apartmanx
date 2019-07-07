@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <a href="{{.Link}}">
+        <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    </a>
+{{if .FirmaKayitDurum}}
+    <span class="text-success" style="margin-left: 50px;font-size: 18px;"> Firma Başarıyla Kaydedildi</span>
+{{end}}
+    <hr/>
+    <div class="row m0" style="margin:0px 30px 0px 30px;padding:10px;">
+        <form method="get">
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <input type="text" name="firmaara" class="form-control" required="true" maxlength="50"
+                           placeholder="Firma"/>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark" style="cursor: pointer;">ARA</button>
+                </div>
+                <script type="text/javascript">
+                    function tumfirmalar() {
+                        window.location = "/tanimlar/firmaTanimi?firmaara=tumfirmalar";
+                        return false;
+                    }
+                </script>
+                <div class="col-md-2">
+                    <button type="submit" onclick="return tumfirmalar()" class="btn btn-dark" style="cursor: pointer;">
+                        TÜM FİRMALAR
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form action="" method="post" style="margin:0px 30px 0px 30px;padding:10px;border:1px #a5abb1 solid;">
+        <div class="row m0">
+            <div class="col-md-4" style="border-right: 1px lightgray solid;">
+                <h5>Firma Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Ad</label>
+                    <div class="col-md-7">
+                        <input name="ad" type="text" class="form-control" required="true" maxlength="50" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Firma Sahibi</label>
+                    <div class="col-md-7">
+                        <input type="text" name="sahibad" class="form-control" maxlength="50" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" style="border-right: 1px lightgray solid;">
+                <h5 style="visibility: hidden;">Firma Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Mail</label>
+                    <div class="col-md-7">
+                        <input type="email" name="mail" class="form-control" maxlength="50" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Telefon</label>
+                    <div class="col-md-7">
+                        <input type="number" name="telefon" class="form-control" maxlength="50" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 style="visibility: hidden;">Firma Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Adres</label>
+                    <div class="col-md-7">
+						<textarea name="adres" class="form-control" maxlength="150" ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row m0">
+            <button type="submit" name="firmakayit" value="tiktak" class="btn btn-dark"
+                    style="cursor: pointer;margin-right: 10px;">
+                Kaydet
+            </button>
+        </div>
+    </form>
+    <hr/>
+    <div class="row m0">
+        <div class="col-md-12">
+		{{if .FirmaAra}}
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ad</th>
+                    <th scope="col">Sahibad</th>
+                    <th scope="col">Mail</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col">Adres</th>
+                    <th scope="col">Zaman</th>
+                    <th scope="col">Kaydet</th>
+                </tr>
+                </thead>
+                <tbody>
+                <script type="text/javascript">
+                    function firmaguncelle(idx) {
+                        $(document).ready(function () {
+                            var adx = $("#ad" + idx).val();
+                            if (adx == "") {
+                                alert("Firma adı boş olamaz!");
+                                return;
+                            }
+                            var sahibadx = $("#sahibad" + idx).val();
+                            var mailx = $("#mail" + idx).val();
+                            var telefonx = $("#telefon" + idx).val();
+                            var adresx = $("#adres" + idx).val();
+                            $.ajax({
+                                type: "POST",
+                                url: "/post",
+                                data: {
+                                    firmaguncelle: "tiktak",
+                                    id: idx,
+                                    ad: adx,
+                                    sahibad: sahibadx,
+                                    mail: mailx,
+                                    telefon: telefonx,
+                                    adres: adresx
+                                },
+                                dataType: "json",
+                                success: function (result) {
+                                    if (result.sonuc == "olumlu") {
+                                        document.getElementById("kayit" + idx).style.display = "inline-block";
+                                        document.getElementById("zaman" + idx).innerHTML = result.zaman;
+                                        setTimeout(function () {
+                                            document.getElementById("kayit" + idx).style.display = "none";
+                                        }, 5000);
+                                    } else {
+                                        alert("hata");
+                                    }
+                                }
+                            });
+                        })
+                    }
+                </script>
+				{{range $index,$firma := .FirmalarBilgi}}
+                <tr id="{{$firma.Id}}">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled>{{$index}}</button>
+                    </th>
+                    <td>
+                        <input id="ad{{$firma.Id}}" name="ad" type="text" class="form-control" required="true"
+                               maxlength="50"
+                               value="{{$firma.Ad}}"/>
+                    </td>
+                    <td>
+                        <input id="sahib{{$firma.Id}}" type="text" name="sahib" class="form-control" required="true"
+                               maxlength="50"
+                               value="{{$firma.Sahibad}}"/>
+                    </td>
+                    <td>
+                        <input id="mail{{$firma.Id}}" type="email" name="mail" class="form-control" maxlength="50"
+                               value="{{$firma.Mail}}"/>
+                    </td>
+                    <td>
+                        <input id="telefon{{$firma.Id}}" type="number" name="telefon" class="form-control" maxlength="50"
+                               value="{{$firma.Telefon}}"/>
+                    </td>
+                    <td>
+                        <textarea id="adres{{$firma.Id}}" name="adres" class="form-control" maxlength="150" rows="1"
+                                  value="{{$firma.Adres}}" ></textarea>
+                    </td>
+                    <td>
+                        <button id="zaman{{$firma.Id}}" class="btn btn-light" disabled>{{$firma.Zaman}}</button>
+                    </td>
+                    <td>
+                        <span id="kayit{{$firma.Id}}" style="color: #1c7430;display: none;">Kaydedildi</span>
+                        <button class="btn btn-dark"
+                                onclick="firmaguncelle({{$firma.Id}})" style="cursor:pointer;">
+                            Kaydet
+                        </button>
+                    </td>
+                </tr>
+				{{end}}
+                </tbody>
+            </table>
+		{{end}}
+        </div>
+    </div>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

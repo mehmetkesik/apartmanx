@@ -1,0 +1,120 @@
+<form method="get">
+    <input name="rapor" value="firmaBorclari" style="display: none;"/>
+    <div class="row m0">
+        <div class="col-md-3 p0" style="border-right: 1px lightgray solid;">
+            <label>Firma Seçimi: </label><br/>
+            <div class="form-group row m0">
+                <div class="col-md-12">
+                    <select class="form-control" name="kisiid">
+                    {{range $index,$firma := .Firmalar}}
+                        <option value="{{$firma.Id}}">{{$firma.Ad}}</option>
+                    {{end}}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" style="border-right: 1px lightgray solid;">
+            <label>Blok / Daire No :</label><br/>
+            <div class="form-group row m0">
+                <div class="col-md-6">
+                    <select class="form-control" name="blok">
+                    {{range $index,$daireblok := .DaireBlok}}
+                        <option value="{{$daireblok}}">{{$daireblok}}</option>
+                    {{end}}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="number" name="daireno" class="form-control" required="true" maxlength="10" min="1"
+                           value="1"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label>Baş. Tarihi: </label>
+            <input name="bastarih" type="date" class="form-control"/>
+        </div>
+        <div class="col-md-3">
+            <label>Bit. Tarihi: </label>
+            <input name="bittarih" type="date" class="form-control"/>
+        </div>
+    </div>
+    <div class="row m0">
+        <div class="col-md-2">
+            <label style="visibility: hidden;">Ara: </label><br/>
+            <button class="btn btn-dark" type="submit" style="cursor: pointer;">SORGULA</button>
+        </div>
+    </div>
+</form>
+<hr/>
+{{if .FirmaBorclariAra}}
+<br/>
+<div class="row m0">
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-hover" id="borctablo">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Blok</th>
+                <th scope="col">Daire No</th>
+                <th scope="col">Sorumlu</th>
+                <th scope="col">Gün</th>
+                <th scope="col">Tarih</th>
+                <th scope="col">Gelir-Gider</th>
+                <th scope="col">Firma</th>
+                <th scope="col">Borç</th>
+                <th scope="col">Ödeme</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{$linkkisiid := .LinkKisiId}}
+            {{range $index,$borc := .FirmaBorclariRapor}}
+            {{if eq $linkkisiid $borc.Borc.Firmaid}}
+            <tr id="tr{{$borc.Borc.Id}}">
+                <th scope="row">
+                {{$index}}
+                </th>
+                <td>
+                {{$borc.Borc.Blok}}
+                </td>
+                <td>
+                {{$borc.Borc.Daireno}}
+                </td>
+                <td>
+                {{$borc.BorcluAd}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "2"}}
+                    {{$borc.BorcGun}}
+                {{end}}
+                </td>
+                <td>
+                {{$borc.Borc.Tarih}}
+                </td>
+                <td>
+                {{$borc.Borc.Gelirgiderad}}
+                </td>
+                <td>
+                {{$borc.Borc.Firmaad}}
+                </td>
+                <td>
+                {{if eq $borc.Borc.Zamangrup "1"}}
+                        {{$borc.Borc.Miktar}}
+                    {{else if eq $borc.Borc.Zamangrup "2"}}
+                        {{$borc.BorcPayi}}
+                    {{end}}
+                </td>
+                <td>
+                {{range $index,$odemebilgi := $borc.Borc.Odemeler}}
+                    {{if eq $odemebilgi.Kisiid $borc.BorcluId}}
+                        {{$odemebilgi.Miktar}}
+                    {{end}}
+                {{end}}
+                </td>
+            </tr>
+            {{end}}
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+    <title>Apartman X - {{.Ad}}</title>
+    <meta id="description" name="description" content="Apartman Yönetimi"/>
+    <meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" href="/root/img/icon.ico"/>
+    <link rel="stylesheet" href="/root/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/root/css/style.css"/>
+    <script src="/root/js/jquery-2.2.0.min.js"></script>
+    <script src="/root/js/popper.min.js"></script>
+    <script src="/root/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid p0">
+{{template "header.html" .}}
+    <br/>
+    <a href="{{.Link}}">
+        <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+    </a>
+{{if .KisiKayitDurum}}
+    <span class="text-success" style="margin-left: 50px;font-size: 18px;"> Kişi Başarıyla Kaydedildi</span>
+{{end}}
+    <hr/>
+    <div class="row m0" style="margin:0px 30px 0px 30px;padding:10px;">
+        <form method="get">
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <input type="text" name="kisiara" class="form-control" required="true" maxlength="50"
+                           placeholder="Kişi"/>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark" style="cursor: pointer;">ARA</button>
+                </div>
+                <script type="text/javascript">
+                    function tumkisiler() {
+                        window.location = "/tanimlar/kisiTanimi?kisiara=tumkisiler";
+                        return false;
+                    }
+                </script>
+                <div class="col-md-2">
+                    <button type="submit" onclick="return tumkisiler()" class="btn btn-dark" style="cursor: pointer;">
+                        TÜM KİŞİLER
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form action="" method="post" style="margin:0px 30px 0px 30px;padding:10px;border:1px #a5abb1 solid;">
+        <div class="row m0">
+            <div class="col-md-4" style="border-right: 1px lightgray solid;">
+                <h5>Kişi Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Ad</label>
+                    <div class="col-md-7">
+                        <input name="ad" type="text" class="form-control" required="true" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Soyad</label>
+                    <div class="col-md-7">
+                        <input type="text" name="soyad" class="form-control" required="true" maxlength="50"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" style="border-right: 1px lightgray solid;">
+                <h5 style="visibility: hidden;">Kişi Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Mail</label>
+                    <div class="col-md-7">
+                        <input type="email" name="mail" class="form-control" maxlength="50"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Telefon</label>
+                    <div class="col-md-7">
+                        <input type="number" name="telefon" class="form-control" maxlength="50"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 style="visibility: hidden;">Kişi Bilgileri</h5>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Cinsiyet</label>
+                    <div class="col-md-7">
+                        <select class="form-control" name="cinsiyet">
+                            <option value="" selected></option>
+                            <option value="ERKEK">Erkek</option>
+                            <option value="KIZ">Kız</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">Yaş</label>
+                    <div class="col-md-7">
+                        <input type="number" name="yas" class="form-control" maxlength="10" min="1"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row m0">
+            <button type="submit" name="kisikayit" value="tiktak" class="btn btn-dark"
+                    style="cursor: pointer;margin-right: 10px;">
+                Kaydet
+            </button>
+        </div>
+    </form>
+    <hr/>
+    <div class="row m0">
+        <div class="col-md-12">
+        {{if .KisiAra}}
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ad</th>
+                    <th scope="col">Soyad</th>
+                    <th scope="col">Mail</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col">Cinsiyet</th>
+                    <th scope="col">Yaş</th>
+                    <th scope="col">Zaman</th>
+                    <th scope="col">Kaydet</th>
+                </tr>
+                </thead>
+                <tbody>
+                <script type="text/javascript">
+                    function kisiguncelle(idx) {
+                        $(document).ready(function () {
+                            var adx = $("#ad" + idx).val();
+                            var soyadx = $("#soyad" + idx).val();
+                            if (adx == "" || soyadx == "") {
+                                alert("ad ve soyad boş olamaz!");
+                                return;
+                            }
+                            var mailx = $("#mail" + idx).val();
+                            var telefonx = $("#telefon" + idx).val();
+                            var cinsiyetx = $("#cinsiyet" + idx).val();
+                            var yasx = $("#yas" + idx).val();
+                            $.ajax({
+                                type: "POST",
+                                url: "/post",
+                                data: {
+                                    kisiguncelle: "tiktak",
+                                    id: idx,
+                                    ad: adx,
+                                    soyad: soyadx,
+                                    mail: mailx,
+                                    telefon: telefonx,
+                                    cinsiyet: cinsiyetx,
+                                    yas: yasx
+                                },
+                                dataType: "json",
+                                success: function (result) {
+                                    if (result.sonuc == "olumlu") {
+                                        document.getElementById("kayit" + idx).style.display = "inline-block";
+                                        document.getElementById("zaman" + idx).innerHTML = result.zaman;
+                                        setTimeout(function () {
+                                            document.getElementById("kayit" + idx).style.display = "none";
+                                        }, 5000);
+                                    } else {
+                                        alert("hata");
+                                    }
+                                }
+                            });
+                        })
+                    }
+                </script>
+                {{range $index,$kisi := .KisilerBilgi}}
+                <tr id="{{$kisi.Id}}">
+                    <th scope="row">
+                        <button class="btn btn-light" disabled>{{$index}}</button>
+                    </th>
+                    <td>
+                        <input id="ad{{$kisi.Id}}" name="ad" type="text" class="form-control" required="true"
+                               maxlength="50"
+                               value="{{$kisi.Ad}}"/>
+                    </td>
+                    <td>
+                        <input id="soyad{{$kisi.Id}}" type="text" name="soyad" class="form-control" required="true"
+                               maxlength="50"
+                               value="{{$kisi.Soyad}}"/>
+                    </td>
+                    <td>
+                        <input id="mail{{$kisi.Id}}" type="email" name="mail" class="form-control" maxlength="50"
+                               value="{{$kisi.Mail}}"/>
+                    </td>
+                    <td>
+                        <input id="telefon{{$kisi.Id}}" type="number" name="telefon" class="form-control" maxlength="50"
+                               value="{{$kisi.Telefon}}"/>
+                    </td>
+                    <td>
+                        <select id="cinsiyet{{$kisi.Id}}" class="form-control cinsiyet" name="cinsiyet"
+                                style="min-width: 100px;">
+                        {{if eq $kisi.Cinsiyet "ERKEK"}}
+                            <option value=""></option>
+                            <option value="ERKEK" selected>Erkek</option>
+                            <option value="KIZ">Kız</option>
+                        {{else if eq $kisi.Cinsiyet "KIZ"}}
+                            <option value=""></option>
+                            <option value="ERKEK">Erkek</option>
+                            <option value="KIZ" selected>Kız</option>
+                        {{else}}
+                            <option value="" selected></option>
+                            <option value="ERKEK">Erkek</option>
+                            <option value="KIZ">Kız</option>
+                        {{end}}
+                        </select>
+                    </td>
+                    <td>
+                        <input id="yas{{$kisi.Id}}" type="number" name="yas" class="form-control" maxlength="10" min="1"
+                               value="{{$kisi.Yas}}"/>
+                    </td>
+                    <td>
+                        <button id="zaman{{$kisi.Id}}" class="btn btn-light" disabled>{{$kisi.Zaman}}</button>
+                    </td>
+                    <td>
+                        <span id="kayit{{$kisi.Id}}" style="color: #1c7430;display: none;">Kaydedildi</span>
+                        <button class="btn btn-dark"
+                                onclick="kisiguncelle({{$kisi.Id}})" style="cursor:pointer;">
+                            Kaydet
+                        </button>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        {{end}}
+        </div>
+    </div>
+    <br/>
+{{template "footer.html" .}}
+</div>
+</body>
+</html>

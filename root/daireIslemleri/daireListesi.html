@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+ 	<head>
+   		<title>Apartman X - {{.Ad}}</title>
+  	 	<meta id="description" name="description" content="Apartman Yönetimi" />
+   		<meta id="keywords" name="keywords" content="Apartman yönetimi , Daireler" />
+   		<meta charset="utf-8"/>
+   		<meta name="viewport" content="width-device-width, initial-scale=1, maximum-scale=1"/>
+   		<link rel="shortcut icon" href="/root/img/icon.ico"/>
+   		<link rel="stylesheet" href="/root/css/bootstrap.css"/>
+		<link rel="stylesheet" href="/root/css/style.css"/>
+		<script src="/root/js/jquery-3.2.1.slim.min.js"></script>
+		<script src="/root/js/popper.min.js"></script>
+		<script src="/root/js/bootstrap.min.js"></script>
+ 	</head>
+ 	<body>
+  		<div class="container-fluid p0">
+			{{template "header.html" .}}
+			<br/>
+            <a href="{{.Link}}" style="text-decoration: none;">
+                <h3 style="margin-left:30px;color:#868e96;display: inline-block;">{{.Ad}}</h3>
+            </a>
+			<div class="row m0" style="padding: 20px;">
+				<div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Blok</th>
+                            <th scope="col">Daire No</th>
+                            <th scope="col">Mülk Sahibi</th>
+                            <th scope="col">Kiracı</th>
+                            <th scope="col">Tipi</th>
+                            <th scope="col">Son Değişiklik Tarihi</th>
+                            <th scope="col">Ayrıntılar</th>
+                            <th scope="col">Daire Hareketleri</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{$tipler := .Tipi}}
+						{{range $index,$daire := .Daireler}}
+                        <tr>
+                            <th scope="row">{{$index}}</th>
+                            <td>{{$daire.Blok}}</td>
+                            <td>{{$daire.Daireno}}</td>
+                            <td>{{$daire.Mulksahibi}}</td>
+                            <td>{{$daire.Kiraci}}</td>
+                            {{range $i,$tipi := $tipler}}
+                                {{if eq $tipi.Id $daire.TipiId}}
+                                    <td>{{$tipi.Ad}}</td>
+                                {{end}}
+                            {{end}}
+                            <td>{{$daire.Zaman}}</td>
+							<td>
+								<a href="/daireIslemleri/daireKayitDuzenleme?blok={{$daire.Blok}}&daireno={{$daire.Daireno}}" >
+									Ayrıntılar
+								</a>
+							</td>
+                            <td>
+                                <a href="/daireIslemleri/daireHareketleri?blok={{$daire.Blok}}&daireno={{$daire.Daireno}}" >
+                                    Daire Hareketleri
+                                </a>
+							</td>
+                        </tr>
+						{{end}}
+                        </tbody>
+                    </table>
+				</div>
+			</div>
+			<br/>
+			{{template "footer.html" .}}
+		</div>
+ 	</body>
+</html>
